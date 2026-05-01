@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const sequelize = require('./config/database');
 
-<<<<<<< HEAD
+
 // ================= APP =================
 const app = express();
 
