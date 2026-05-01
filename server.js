@@ -1,57 +1,62 @@
 require('dotenv').config();
-const path = require('path');
-const dotenv = require('dotenv');
-const fs = require('fs');
 
 const express = require('express');
 const cors = require('cors');
-
 const sequelize = require('./config/database');
-
-// ================= ENV =================
-const envPath = path.resolve(__dirname, '.env');
-dotenv.config({ path: envPath });
-
-// debug
-console.log("ENV EXISTS:", fs.existsSync(envPath));
-console.log("DATABASE_URL =", process.env.DATABASE_URL);
 
 // ================= APP =================
 const app = express();
 
-// middleware
+// ================= MIDDLEWARE =================
 app.use(express.json());
-app.use(cors());
+
+// ================= CORS =================
+app.use(cors({
+  origin: "https://dzshop-frontend.vercel.app",
+  credentials: true
+}));
+
+// ================= ROOT ROUTE =================
+app.get("/", (req, res) => {
+  res.json({
+    status: "OK",
+    message: "DZShop Backend is running 🚀"
+  });
+});
+
+// ================= HEALTH CHECK =================
+app.get("/health", (req, res) => {
+  res.json({
+    status: "OK",
+    message: "API is healthy 🚀"
+  });
+});
 
 // ================= ROUTES =================
-
-// PRODUCTS
 app.use('/api/products', require('./routes/productRoutes'));
-
-// ORDERS
-console.log("LOADING ORDER ROUTES...");
 app.use('/api/orders', require('./routes/orderRoutes'));
-
-// ================= HEALTH =================
-app.get('/health', (req, res) => {
-  res.json({ message: 'DZ-Shop API is running!' });
-});
 
 // ================= MODELS =================
 require('./models/Product');
 require('./models/User');
 require('./models/Order');
-require('./models/index'); // العلاقات (associations)
+require('./models/index');
 
 // ================= START SERVER =================
-sequelize.sync({ alter: true })
-  .then(() => {
-    console.log("Database connected");
+const PORT = process.env.PORT || 3000;
 
-    app.listen(3000, () => {
-      console.log("Server running on http://localhost:3000");
+// مهم: تحسين error handling
+sequelize.authenticate()
+  .then(() => {
+    console.log("✅ Database connected successfully");
+
+    return sequelize.sync({ alter: false });
+  })
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   })
   .catch(err => {
-    console.log("DB ERROR:", err);
+    console.error("❌ DB ERROR:", err);
   });
