@@ -12,7 +12,10 @@ app.use(express.json());
 
 // ================= CORS =================
 app.use(cors({
-  origin: "https://dzshop-frontend.vercel.app",
+  origin: [
+    "https://dzshop-frontend.vercel.app",
+    "https://master-web-2026-cxek.vercel.app"
+  ],
   credentials: true
 }));
 
