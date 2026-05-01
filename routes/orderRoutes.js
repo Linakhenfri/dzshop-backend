@@ -13,5 +13,5 @@ router.get("/", auth, orderController.getOrders);
 
 module.exports = router;
 
-module.exports = router;
+
 
