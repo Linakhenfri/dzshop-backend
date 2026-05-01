@@ -12,7 +12,7 @@ app.use(express.json());
 
 // ================= CORS =================
 app.use(cors({
-  origin: true,
+  origin: "*", // مؤقت باش يخدم
   credentials: true
 }));
 // ================= ROOT ROUTE =================
