@@ -4,7 +4,12 @@ const express = require('express');
 const cors = require('cors');
 const sequelize = require('./config/database');
 
-// ================= APP =================
+// ✅ MODELS أولاً
+require('./models/Product');
+require('./models/User');
+require('./models/Order');
+require('./models/index');
+
 const app = express();
 
 // ================= MIDDLEWARE =================
@@ -12,10 +17,15 @@ app.use(express.json());
 
 // ================= CORS =================
 app.use(cors({
-  origin: "*", // مؤقت باش يخدم
+  origin: "*",
   credentials: true
 }));
-// ================= ROOT ROUTE =================
+
+// ================= ROUTES =================
+app.use('/api/products', require('./routes/productRoutes'));
+app.use('/api/orders', require('./routes/orderRoutes'));
+
+// ================= TEST =================
 app.get("/", (req, res) => {
   res.json({
     status: "OK",
@@ -23,39 +33,20 @@ app.get("/", (req, res) => {
   });
 });
 
-// ================= HEALTH CHECK =================
-app.get("/health", (req, res) => {
-  res.json({
-    status: "OK",
-    message: "API is healthy 🚀"
-  });
-});
-
-// ================= ROUTES =================
-app.use('/api/products', require('./routes/productRoutes'));
-app.use('/api/orders', require('./routes/orderRoutes'));
-
-// ================= MODELS =================
-require('./models/Product');
-require('./models/User');
-require('./models/Order');
-require('./models/index');
-
 // ================= START SERVER =================
 const PORT = process.env.PORT || 3000;
 
-// مهم: تحسين error handling
 sequelize.authenticate()
   .then(() => {
-    console.log("✅ Database connected successfully");
+    console.log("✅ Database connected");
 
-    return sequelize.sync({ alter: true });
+    return sequelize.sync();
   })
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🚀 Server running on ${PORT}`);
     });
   })
   .catch(err => {
-    console.error("❌ DB ERROR:", err);
+    console.error("❌ ERROR:", err);
   });
