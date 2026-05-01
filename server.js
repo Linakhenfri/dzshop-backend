@@ -12,7 +12,10 @@ app.use(express.json());
 
 // ================= CORS =================
 app.use(cors({
-  origin: "https://dzshop-frontend.vercel.app",
+  origin: [
+    "https://dzshop-frontend.vercel.app",
+    "https://master-web-2026-cxek-o5nc85smm-linakhenfris-projects.vercel.app"
+  ],
   credentials: true
 }));
 
@@ -50,7 +53,7 @@ sequelize.authenticate()
   .then(() => {
     console.log("✅ Database connected successfully");
 
-    return sequelize.sync({ alter: false });
+    return sequelize.sync({ alter: true });
   })
   .then(() => {
     app.listen(PORT, () => {
