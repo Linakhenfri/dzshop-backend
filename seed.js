@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 require("dotenv").config();
 
 const sequelize = require("./config/database");
@@ -24,10 +25,21 @@ const seed = async () => {
     if (count > 0) {
       console.log("⚠️ Already seeded");
       return process.exit();
+=======
+const seed = async () => {
+  try {
+    await sequelize.sync(); // ❌ بدون force
+
+    const count = await Product.count();
+    if (count > 0) {
+      console.log("Already seeded");
+      process.exit();
+>>>>>>> d9857561f7d27ebc749fa00ff03caf5e8ef47292
     }
 
     await Product.bulkCreate(products);
 
+<<<<<<< HEAD
     console.log("🎉 Seed completed successfully");
 
     process.exit();
@@ -37,3 +49,11 @@ const seed = async () => {
 };
 
 seed(); // 🔥 هذا أهم سطر
+=======
+    console.log("✅ Seeded Successfully");
+    process.exit();
+  } catch (error) {
+    console.log(error);
+  }
+};
+>>>>>>> d9857561f7d27ebc749fa00ff03caf5e8ef47292
