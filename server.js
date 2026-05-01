@@ -38,15 +38,15 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 
 // ================= MODELS =================
-=======
+
 // ✅ MODELS أولاً
 >>>>>>> d9857561f7d27ebc749fa00ff03caf5e8ef47292
 require('./models/Product');
 require('./models/User');
 require('./models/Order');
 require('./models/index');
-<<<<<<< HEAD
-=======
+
+
 
 const app = express();
 
@@ -70,7 +70,7 @@ app.get("/", (req, res) => {
     message: "DZShop Backend is running 🚀"
   });
 });
->>>>>>> d9857561f7d27ebc749fa00ff03caf5e8ef47292
+
 
 // ================= START SERVER =================
 const PORT = process.env.PORT || 3000;
@@ -91,7 +91,7 @@ sequelize.authenticate()
   .catch(err => {
     console.error("❌ DB ERROR:", err);
   });
-=======
+
 sequelize.authenticate()
   .then(() => {
     console.log("✅ Database connected");
