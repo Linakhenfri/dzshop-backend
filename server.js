@@ -12,10 +12,7 @@ app.use(express.json());
 
 // ================= CORS =================
 app.use(cors({
-  origin: [
-    "https://dzshop-frontend.vercel.app",
-    "https://master-web-2026-cxek-o5nc85smm-linakhenfris-projects.vercel.app"
-  ],
+  origin: true,
   credentials: true
 }));
 // ================= ROOT ROUTE =================
