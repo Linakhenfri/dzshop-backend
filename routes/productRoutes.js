@@ -4,10 +4,10 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const productController = require('../controllers/productController');
 
-// ✅ GET products (pagination + filter)
+// GET products
 router.get('/', productController.getAllProducts);
 
-// 🔐 POST product (protected)
+// CREATE product (protected)
 router.post('/', auth, productController.createProduct);
 
 module.exports = router;
