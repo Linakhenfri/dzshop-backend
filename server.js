@@ -21,19 +21,16 @@ app.get("/", (req, res) => {
   res.json({ status: "OK", message: "DZShop Backend is running 🚀" });
 });
 
+// 🚀 Start server AFTER DB sync
 const PORT = process.env.PORT || 3000;
 
-// DB + server start (مرة واحدة فقط)
-sequelize.authenticate()
+sequelize.sync()
   .then(() => {
-    console.log("✅ DB connected");
-    return sequelize.sync();
-  })
-  .then(() => {
+    console.log("📦 DB synced");
     app.listen(PORT, () => {
       console.log("🚀 Server running on port", PORT);
     });
   })
   .catch((err) => {
-    console.error("❌ ERROR:", err);
+    console.error("❌ Sync error:", err);
   });
