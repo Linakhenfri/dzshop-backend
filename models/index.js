@@ -5,11 +5,10 @@ const Order = require('./Order');
 const Product = require('./Product');
 const OrderItem = require('./OrderItem');
 
-// ✅ User ↔ Order (One-to-Many)
+// relations
 User.hasMany(Order, { foreignKey: 'userId' });
 Order.belongsTo(User, { foreignKey: 'userId' });
 
-// ✅ Order ↔ Product (Many-to-Many)
 Order.belongsToMany(Product, {
   through: OrderItem,
   foreignKey: "orderId",
@@ -27,5 +26,5 @@ module.exports = {
   User,
   Order,
   Product,
-  OrderItem,
+  OrderItem
 };
