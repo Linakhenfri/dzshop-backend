@@ -23,6 +23,7 @@ app.get("/test-db", async (req, res) => {
 // routes
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
+app.use("/api", require("./routes/auth"));
 
 // health
 app.get("/", (req, res) => {
