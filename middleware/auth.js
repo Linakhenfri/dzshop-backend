@@ -1,28 +1,19 @@
 const jwt = require("jsonwebtoken");
 
-const auth = (req, res, next) => {
+module.exports = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ message: "No token provided" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
   try {
-    // 🔐 استخراج التوكن (Bearer token)
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-      return res.status(401).json({ message: "No token provided" });
-    }
-
-    // 🔍 التحقق من التوكن
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || "secret"
-    );
-
-    // 👤 نضيف user للـ request
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret");
     req.user = decoded;
-
     next();
-
-  } catch (error) {
+  } catch (err) {
     return res.status(401).json({ message: "Invalid token" });
   }
 };
-
-module.exports = auth;
