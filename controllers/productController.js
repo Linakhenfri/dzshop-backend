@@ -1,5 +1,26 @@
 const Product = require('../models/Product');
 
+// ➤ GET PRODUCTS (Pagination + Filtering)
+const getAllProducts = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, category } = req.query;
+
+    const offset = (page - 1) * limit;
+
+    const products = await Product.findAll({
+      where: category ? { category } : {},
+      limit: parseInt(limit),
+      offset: parseInt(offset)
+    });
+
+    res.status(200).json(products);
+
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
+};
+
+// ➤ CREATE PRODUCT
 const createProduct = async (req, res) => {
   try {
     const newProduct = await Product.create(req.body);
@@ -9,16 +30,7 @@ const createProduct = async (req, res) => {
   }
 };
 
-const getAllProducts = async (req, res) => {
-  try {
-    const products = await Product.findAll();
-    res.status(200).json(products);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch products" });
-  }
-};
-
 module.exports = {
-  createProduct,
-  getAllProducts
+  getAllProducts,
+  createProduct
 };
