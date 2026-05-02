@@ -5,19 +5,21 @@ const Order = require('./Order');
 const Product = require('./Product');
 const OrderItem = require('./OrderItem');
 
-// User ↔ Order
+// ✅ User ↔ Order (One-to-Many)
 User.hasMany(Order, { foreignKey: 'userId' });
 Order.belongsTo(User, { foreignKey: 'userId' });
 
-// 🔥 Many-to-Many (المهم)
+// ✅ Order ↔ Product (Many-to-Many)
 Order.belongsToMany(Product, {
   through: OrderItem,
-  foreignKey: "orderId"
+  foreignKey: "orderId",
+  otherKey: "productId"
 });
 
 Product.belongsToMany(Order, {
   through: OrderItem,
-  foreignKey: "productId"
+  foreignKey: "productId",
+  otherKey: "orderId"
 });
 
 module.exports = {
