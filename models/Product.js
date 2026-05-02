@@ -18,6 +18,10 @@ const Product = sequelize.define('Product', {
     }
   },
 
+  category: {
+  type: DataTypes.STRING
+  },
+
   description: {
     type: DataTypes.TEXT
   },
