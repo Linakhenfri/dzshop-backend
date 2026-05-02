@@ -4,10 +4,10 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const productController = require('../controllers/productController');
 
-// GET products
+// GET
 router.get('/', productController.getAllProducts);
 
-// CREATE product (protected)
+// POST (protected)
 router.post('/', auth, productController.createProduct);
 
 module.exports = router;
