@@ -1,14 +1,15 @@
-const sequelize = require('../config/database');
+const sequelize = require("../config/database");
 
-const User = require('./User');
-const Order = require('./Order');
-const Product = require('./Product');
-const OrderItem = require('./OrderItem');
+const User = require("./User");
+const Order = require("./Order");
+const Product = require("./Product");
+const OrderItem = require("./OrderItem");
 
-// relations
-User.hasMany(Order, { foreignKey: 'userId' });
-Order.belongsTo(User, { foreignKey: 'userId' });
+// 👤 User → Orders
+User.hasMany(Order, { foreignKey: "userId" });
+Order.belongsTo(User, { foreignKey: "userId" });
 
+// 🔥 Many-to-Many
 Order.belongsToMany(Product, {
   through: OrderItem,
   foreignKey: "orderId",
