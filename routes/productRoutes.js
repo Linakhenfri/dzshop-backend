@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
+const auth = require("../middleware/auth");
 const productController = require('../controllers/productController');
 
-// GET (pagination + filter)
+// ✅ GET products (pagination + filter)
 router.get('/', productController.getAllProducts);
 
-// POST
-router.post('/', productController.createProduct);
+// 🔐 POST product (protected)
+router.post('/', auth, productController.createProduct);
 
 module.exports = router;
