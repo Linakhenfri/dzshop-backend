@@ -18,7 +18,7 @@ const getAllProducts = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    console.log("❌ ERROR:", error);
     res.status(500).json({
       error: "Failed to fetch products"
     });
@@ -29,11 +29,9 @@ const getAllProducts = async (req, res) => {
 const createProduct = async (req, res) => {
   try {
     const newProduct = await Product.create(req.body);
-
     res.status(201).json(newProduct);
-
   } catch (error) {
-    console.log(error);
+    console.log("❌ ERROR:", error);
     res.status(500).json({
       error: "Failed to create product"
     });
