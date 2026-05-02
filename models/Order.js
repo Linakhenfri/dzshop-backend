@@ -2,17 +2,20 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
 const Order = sequelize.define("Order", {
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+
   totalPrice: {
     type: DataTypes.FLOAT,
     allowNull: false,
+    defaultValue: 0
   },
+
   status: {
     type: DataTypes.STRING,
-    defaultValue: "Pending",
-  },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+    defaultValue: "Pending"
   }
 });
 
