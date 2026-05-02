@@ -3,7 +3,6 @@ require("dotenv").config();
 const sequelize = require("./config/database");
 const Product = require("./models/Product");
 
-// 🔥 20 PRODUCTS EXACTLY
 const products = [
   { title: "iPhone 13", price: 900, description: "Apple smartphone", category: "electronics", stock: 10 },
   { title: "Samsung S21", price: 800, description: "Android smartphone", category: "electronics", stock: 15 },
@@ -32,24 +31,24 @@ const products = [
 
 const seed = async () => {
   try {
-    console.log("🚀 SEED STARTED");
+    console.log("🚀 Seed started");
 
     await sequelize.authenticate();
     console.log("✅ DB connected");
 
-    // 🔥 IMPORTANT FIX: ALWAYS RESET TABLE
+    // 🔥 IMPORTANT FIX
     await sequelize.sync({ force: true });
-    console.log("📦 Table reset done");
+    console.log("📦 DB reset done");
 
     await Product.bulkCreate(products);
 
     const count = await Product.count();
-    console.log("🎉 PRODUCTS INSERTED:", count);
+    console.log("🎉 Total products:", count);
 
     process.exit(0);
 
   } catch (error) {
-    console.log("❌ SEED ERROR:", error);
+    console.log("❌ ERROR:", error);
     process.exit(1);
   }
 };
