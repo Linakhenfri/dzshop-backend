@@ -1,47 +1,44 @@
 require('dotenv').config();
 
 const express = require('express');
-
 const cors = require('cors');
-const sequelize = require('./config/database');
+const { sequelize } = require('./models');
 
 const app = express();
-app.get("/test-db", async (req, res) => {
-  try {
-    await sequelize.authenticate();
-    res.json({ ok: true, message: "DB connected" });
-  } catch (err) {
-    res.status(500).json({
-      error: err.message
-    });
-  }
-});
 
 app.use(express.json());
 
-app.use(cors({
-  origin: "*"
-}));
+app.use(cors({ origin: "*" }));
+
+// test DB
+app.get("/test-db", async (req, res) => {
+  try {
+    await sequelize.authenticate();
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // routes
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 
-// health check
+// health
 app.get("/", (req, res) => {
-  res.json({ status: "OK", message: "DZShop Backend is running 🚀" });
+  res.json({ status: "OK" });
 });
 
-// 🚀 Start server AFTER DB sync
 const PORT = process.env.PORT || 3000;
 
-sequelize.sync()
+sequelize.sync({ alter: true })
   .then(() => {
     console.log("📦 DB synced");
+
     app.listen(PORT, () => {
       console.log("🚀 Server running on port", PORT);
     });
   })
-  .catch((err) => {
-    console.error("❌ Sync error:", err);
+  .catch(err => {
+    console.error("❌ SYNC ERROR:", err);
   });
