@@ -1,6 +1,5 @@
 const { Order, Product, OrderItem } = require("../models");
 
-
 exports.createOrder = async (req, res) => {
   try {
     const { items } = req.body;
@@ -10,10 +9,17 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ error: "Items are required" });
     }
 
+    // 🔍 fetch all products at once (better performance)
+    const productIds = items.map(i => i.productId);
+    const products = await Product.findAll({
+      where: { id: productIds }
+    });
+
     let totalPrice = 0;
 
+    // 🔍 check stock
     for (let item of items) {
-      const product = await Product.findByPk(item.productId);
+      const product = products.find(p => p.id === item.productId);
 
       if (!product) {
         return res.status(404).json({ error: "Product not found" });
@@ -28,17 +34,19 @@ exports.createOrder = async (req, res) => {
       totalPrice += product.price * item.quantity;
     }
 
+    // 🧾 create order
     const order = await Order.create({
       userId,
       totalPrice
     });
 
+    // 🔗 create order items + update stock
     for (let item of items) {
-      const product = await Product.findByPk(item.productId);
+      const product = products.find(p => p.id === item.productId);
 
       await OrderItem.create({
         OrderId: order.id,
-        ProductId: item.productId,
+        ProductId: product.id,
         quantity: item.quantity
       });
 
@@ -48,8 +56,7 @@ exports.createOrder = async (req, res) => {
 
     res.status(201).json({
       message: "Order created successfully",
-      order,
-      totalPrice
+      order
     });
 
   } catch (error) {
@@ -58,20 +65,20 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-
 exports.getOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
       where: { userId: req.user.id },
       include: [
         {
-          model: OrderItem,
-          include: [Product]
+          model: Product,
+          through: { attributes: ["quantity"] }
         }
       ]
     });
 
     res.json(orders);
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Server error" });
