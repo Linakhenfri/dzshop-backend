@@ -15,7 +15,8 @@ const User = sequelize.define("User", {
     allowNull: false,
     unique: true,
     validate: {
-      isEmail: true
+      isEmail: true,
+      notEmpty: true
     }
   },
 
@@ -23,8 +24,8 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      len: [6, 100],
-      notEmpty: true
+      notEmpty: true,
+      len: [6, 100]
     }
   }
 });
