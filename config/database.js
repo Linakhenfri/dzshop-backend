@@ -1,20 +1,20 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-// 🔍 Debug (اختياري للتأكد من .env)
-console.log("ENV FILE TEST:", process.env.DATABASE_URL);
-
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',
   logging: false,
-
-  // 🔐 مهم للـ hosting (Render / Railway / Supabase)
- dialectOptions: {
-  ssl: {
-    require: true,
-    rejectUnauthorized: false
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
   }
- }
 });
+
+// 🔍 test DB connection
+sequelize.authenticate()
+  .then(() => console.log("✅ DB connected successfully"))
+  .catch(err => console.error("❌ DB connection failed:", err));
 
 module.exports = sequelize;
