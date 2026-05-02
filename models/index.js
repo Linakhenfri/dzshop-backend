@@ -9,13 +9,16 @@ const OrderItem = require('./OrderItem');
 User.hasMany(Order, { foreignKey: 'userId' });
 Order.belongsTo(User, { foreignKey: 'userId' });
 
-// Order ↔ OrderItem
-Order.hasMany(OrderItem);
-OrderItem.belongsTo(Order);
+// 🔥 Many-to-Many (المهم)
+Order.belongsToMany(Product, {
+  through: OrderItem,
+  foreignKey: "orderId"
+});
 
-// Product ↔ OrderItem
-Product.hasMany(OrderItem);
-OrderItem.belongsTo(Product);
+Product.belongsToMany(Order, {
+  through: OrderItem,
+  foreignKey: "productId"
+});
 
 module.exports = {
   sequelize,
