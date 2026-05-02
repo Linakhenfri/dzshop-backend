@@ -19,11 +19,13 @@ const Product = sequelize.define('Product', {
   },
 
   category: {
-  type: DataTypes.STRING
+    type: DataTypes.STRING,
+    allowNull: true
   },
 
   description: {
-    type: DataTypes.TEXT
+    type: DataTypes.TEXT,
+    allowNull: true
   },
 
   stock: {
