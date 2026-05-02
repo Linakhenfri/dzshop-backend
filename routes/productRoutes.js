@@ -7,7 +7,7 @@ const productController = require('../controllers/productController');
 // GET
 router.get('/', productController.getAllProducts);
 
-// POST (protected)
+// POST
 router.post('/', auth, productController.createProduct);
 
 module.exports = router;
