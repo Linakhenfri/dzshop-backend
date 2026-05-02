@@ -1,5 +1,6 @@
-const { Order, Product, OrderItem } = require("../models");
+const { Order, Product } = require("../models");
 
+// ✅ CREATE ORDER
 exports.createOrder = async (req, res) => {
   try {
     const { items } = req.body;
@@ -9,15 +10,15 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ error: "Items are required" });
     }
 
-    // 🔍 fetch all products at once (better performance)
     const productIds = items.map(i => i.productId);
+
     const products = await Product.findAll({
       where: { id: productIds }
     });
 
     let totalPrice = 0;
 
-    // 🔍 check stock
+    // check stock
     for (let item of items) {
       const product = products.find(p => p.id === item.productId);
 
@@ -34,20 +35,18 @@ exports.createOrder = async (req, res) => {
       totalPrice += product.price * item.quantity;
     }
 
-    // 🧾 create order
+    // create order
     const order = await Order.create({
       userId,
       totalPrice
     });
 
-    // 🔗 create order items + update stock
+    // 🔥 fill OrderItems
     for (let item of items) {
       const product = products.find(p => p.id === item.productId);
 
-      await OrderItem.create({
-        OrderId: order.id,
-        ProductId: product.id,
-        quantity: item.quantity
+      await order.addProduct(product, {
+        through: { quantity: item.quantity }
       });
 
       product.stock -= item.quantity;
@@ -65,6 +64,8 @@ exports.createOrder = async (req, res) => {
   }
 };
 
+
+// ✅ GET ORDERS
 exports.getOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
