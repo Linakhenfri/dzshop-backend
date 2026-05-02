@@ -1,6 +1,6 @@
-const Product = require('../models/Product');
+const { Product } = require('../models');
 
-// GET PRODUCTS (pagination + filter)
+// GET PRODUCTS
 const getAllProducts = async (req, res) => {
   try {
     const { page = 1, limit = 10, category } = req.query;
@@ -13,13 +13,10 @@ const getAllProducts = async (req, res) => {
       offset: parseInt(offset)
     });
 
-    return res.status(200).json({
-      products
-    });
+    return res.status(200).json({ products });
 
   } catch (error) {
-    console.log("❌ FULL ERROR:");
-    console.log(error);
+    console.log("❌ ERROR:", error);
 
     return res.status(500).json({
       message: error.message
@@ -30,15 +27,15 @@ const getAllProducts = async (req, res) => {
 // CREATE PRODUCT
 const createProduct = async (req, res) => {
   try {
-    const newProduct = await Product.create(req.body);
+    const product = await Product.create(req.body);
 
-    return res.status(201).json(newProduct);
+    return res.status(201).json(product);
 
   } catch (error) {
     console.log("❌ ERROR:", error);
 
     return res.status(500).json({
-      error: error.message
+      message: error.message
     });
   }
 };
