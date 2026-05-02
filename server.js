@@ -2,6 +2,10 @@ require('dotenv').config();
 
 const express = require('express');
 
+const cors = require('cors');
+const sequelize = require('./config/database');
+
+const app = express();
 app.get("/test-db", async (req, res) => {
   try {
     await sequelize.authenticate();
@@ -12,11 +16,6 @@ app.get("/test-db", async (req, res) => {
     });
   }
 });
-
-const cors = require('cors');
-const sequelize = require('./config/database');
-
-const app = express();
 
 app.use(express.json());
 
