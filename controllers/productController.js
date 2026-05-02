@@ -13,29 +13,32 @@ const getAllProducts = async (req, res) => {
       offset: parseInt(offset)
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       products
     });
 
   } catch (error) {
-  console.log("❌ FULL ERROR:");
-  console.log(error);
+    console.log("❌ FULL ERROR:");
+    console.log(error);
 
-  return res.status(500).json({
-    message: error.message,
-    error
-  });
-}
+    return res.status(500).json({
+      message: error.message
+    });
+  }
+};
 
 // CREATE PRODUCT
 const createProduct = async (req, res) => {
   try {
     const newProduct = await Product.create(req.body);
-    res.status(201).json(newProduct);
+
+    return res.status(201).json(newProduct);
+
   } catch (error) {
     console.log("❌ ERROR:", error);
-    res.status(500).json({
-      error: "Failed to create product"
+
+    return res.status(500).json({
+      error: error.message
     });
   }
 };
