@@ -1,6 +1,6 @@
 const Product = require('../models/Product');
 
-// ➤ GET PRODUCTS (Pagination + Filtering)
+// GET PRODUCTS (pagination + filter)
 const getAllProducts = async (req, res) => {
   try {
     const { page = 1, limit = 10, category } = req.query;
@@ -13,20 +13,30 @@ const getAllProducts = async (req, res) => {
       offset: parseInt(offset)
     });
 
-    res.status(200).json(products);
+    res.status(200).json({
+      products
+    });
 
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch products" });
+    console.log(error);
+    res.status(500).json({
+      error: "Failed to fetch products"
+    });
   }
 };
 
-// ➤ CREATE PRODUCT
+// CREATE PRODUCT
 const createProduct = async (req, res) => {
   try {
     const newProduct = await Product.create(req.body);
+
     res.status(201).json(newProduct);
+
   } catch (error) {
-    res.status(500).json({ error: "Failed to create product" });
+    console.log(error);
+    res.status(500).json({
+      error: "Failed to create product"
+    });
   }
 };
 
