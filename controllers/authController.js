@@ -2,17 +2,26 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 exports.login = async (req, res) => {
-  const { email } = req.body;
+  try {
+    const { email } = req.body;
 
-  const user = await User.findOne({ where: { email } });
+    // 🔍 check user
+    const user = await User.findOne({ where: { email } });
 
-  if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-  const token = jwt.sign(
-    { id: user.id },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
+    // 🔐 generate token
+    const token = jwt.sign(
+      { id: user.id }, // unified (أفضل standard)
+      process.env.JWT_SECRET || "secret",
+      { expiresIn: "1d" }
+    );
 
-  res.json({ token });
+    res.json({ token });
+
+  } catch (error) {
+    res.status(500).json({ message: "Login failed", error });
+  }
 };
