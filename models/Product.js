@@ -14,6 +14,7 @@ const Product = sequelize.define('Product', {
     type: DataTypes.FLOAT,
     allowNull: false,
     validate: {
+      notNull: true,
       min: 0
     }
   },
@@ -31,6 +32,7 @@ const Product = sequelize.define('Product', {
   stock: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
+    allowNull: false,
     validate: {
       min: 0
     }
