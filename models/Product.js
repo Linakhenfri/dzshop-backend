@@ -5,18 +5,13 @@ const Product = sequelize.define('Product', {
   title: {
     type: DataTypes.STRING,
     allowNull: false,
-    validate: {
-      notEmpty: true
-    }
+    validate: { notEmpty: true }
   },
 
   price: {
     type: DataTypes.FLOAT,
     allowNull: false,
-    validate: {
-      notNull: true,
-      min: 0
-    }
+    validate: { min: 0 }
   },
 
   category: {
@@ -32,10 +27,7 @@ const Product = sequelize.define('Product', {
   stock: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
-    allowNull: false,
-    validate: {
-      min: 0
-    }
+    validate: { min: 0 }
   }
 });
 
